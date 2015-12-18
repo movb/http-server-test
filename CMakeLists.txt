@@ -11,13 +11,13 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES("${SOURCE_DIR}")
 
-find_package( Boost REQUIRED COMPONENTS system thread )
+find_package( Boost REQUIRED COMPONENTS system thread)
 include_directories( ${Boost_INCLUDE_DIRS} )
 
 FILE(GLOB_RECURSE SOURCES ${SOURCE_DIR}/*.cpp ${SOURCE_DIR}/*.hpp)
 
 add_executable (server ${SOURCES})
-target_link_libraries(server ${Boost_LIBRARIES})
+target_link_libraries(server ${Boost_LIBRARIES} pthread)
 set_property(TARGET server PROPERTY CXX_STANDARD 11)
 
 # Make sure the compiler can find include files for our Hello library
