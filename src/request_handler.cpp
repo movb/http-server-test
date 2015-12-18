@@ -29,8 +29,14 @@ void request_handler::handle_request(const request& req, reply& rep)
   // Decode url to path.
   std::string request_path;
 
+  //greeting/misha
+  if (req.uri.find("/greeting/") != 0) {
+      rep = reply::stock_reply(reply::bad_request);
+      return;
+  }
+
   rep.status = reply::ok;
-  rep.content = "Hello, World!";
+  rep.content = "Hello, " + req.uri.substr(10);
 
   return;
 
