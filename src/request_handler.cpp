@@ -28,6 +28,13 @@ void request_handler::handle_request(const request& req, reply& rep)
 {
   // Decode url to path.
   std::string request_path;
+
+  rep.status = reply::ok;
+  rep.content = "Hello, World!";
+
+  return;
+
+  /*
   if (!url_decode(req.uri, request_path))
   {
     rep = reply::stock_reply(reply::bad_request);
@@ -76,6 +83,7 @@ void request_handler::handle_request(const request& req, reply& rep)
   rep.headers[0].value = std::to_string(rep.content.size());
   rep.headers[1].name = "Content-Type";
   rep.headers[1].value = mime_types::extension_to_type(extension);
+  */
 }
 
 bool request_handler::url_decode(const std::string& in, std::string& out)
