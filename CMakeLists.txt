@@ -11,7 +11,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 SET(SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
 INCLUDE_DIRECTORIES("${SOURCE_DIR}")
 
-find_package( Boost REQUIRED COMPONENTS system thread)
+find_package( Boost REQUIRED COMPONENTS system thread program_options)
 include_directories( ${Boost_INCLUDE_DIRS} )
 
 FILE(GLOB_RECURSE SOURCES ${SOURCE_DIR}/*.cpp ${SOURCE_DIR}/*.hpp)
