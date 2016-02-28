@@ -4,6 +4,8 @@ IF(NOT CMAKE_BUILD_TYPE)
     SET(CMAKE_BUILD_TYPE "Release")
 ENDIF()
 
+SET(PROJECT_NAME "final")
+
 SET(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -ggdb3")
 # set_property CXX_STANDARD 11 not working on some platforms
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
@@ -16,9 +18,9 @@ include_directories( ${Boost_INCLUDE_DIRS} )
 
 FILE(GLOB_RECURSE SOURCES ${SOURCE_DIR}/*.cpp ${SOURCE_DIR}/*.hpp)
 
-add_executable (server ${SOURCES})
-target_link_libraries(server ${Boost_LIBRARIES} pthread)
-set_property(TARGET server PROPERTY CXX_STANDARD 11)
+add_executable (${PROJECT_NAME} ${SOURCES})
+target_link_libraries(${PROJECT_NAME} ${Boost_LIBRARIES} pthread)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
 # Make sure the compiler can find include files for our Hello library
 # when other libraries or executables link to Hello

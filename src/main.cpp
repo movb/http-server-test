@@ -81,9 +81,9 @@ int main(int argc, char* argv[])
     po::options_description desc("Allowed options");
     desc.add_options()
             ("help", "produce help message")
-            ("h", po::value<std::string>(), "host or ip")
-            ("p", po::value<int>(), "port to listen")
-            ("d", po::value<std::string>(), "server document's root")
+            ("host,h", po::value<std::string>(), "host or ip")
+            ("port,p", po::value<int>(), "port to listen")
+            ("docroot,d", po::value<std::string>(), "server document's root")
             ;
 
     try {
@@ -97,22 +97,22 @@ int main(int argc, char* argv[])
             return 1;
         }
 
-        if (vm.count("h")) {
-            host = vm["h"].as<std::string>();
+        if (vm.count("host")) {
+            host = vm["host"].as<std::string>();
         } else {
             std::cout << "Using localhost as default host.\n";
             host = "localhost";
         }
 
-        if (vm.count("p")) {
-            port = vm["p"].as<std::string>();
+        if (vm.count("port")) {
+            port = vm["port"].as<std::string>();
         } else {
             std::cout << "Using 6666 as default port.\n";
             port = "6666";
         }
 
-        if (vm.count("d")) {
-            doc_root = vm["d"].as<std::string>();
+        if (vm.count("docroot")) {
+            doc_root = vm["docroot"].as<std::string>();
         } else {
             std::cout << "Using current directory as default documents root.\n";
             doc_root = "./";
