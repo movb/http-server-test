@@ -63,7 +63,7 @@ static void skeleton_daemon()
 
     /* Change the working directory to the root directory */
     /* or another appropriated directory */
-    chdir("/");
+    //chdir("/");
 
     /* Close all open file descriptors */
     int x;
@@ -118,17 +118,15 @@ int main(int argc, char* argv[])
             doc_root = "./";
         }
 
+        skeleton_daemon();
         // Initialise the server.
         http::server::server s(host, port, doc_root);
-
-        skeleton_daemon();
 
         while (1)
         {
             // Run the server until stopped.
             syslog (LOG_NOTICE, "Http server started.");
             s.run();
-            sleep (20);
             break;
         }
 
