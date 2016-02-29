@@ -82,7 +82,7 @@ int main(int argc, char* argv[])
     desc.add_options()
             ("help", "produce help message")
             ("host,h", po::value<std::string>(), "host or ip")
-            ("port,p", po::value<int>(), "port to listen")
+            ("port,p", po::value<std::string>(), "port to listen")
             ("docroot,d", po::value<std::string>(), "server document's root")
             ;
 
