@@ -19,14 +19,22 @@
 namespace http {
 namespace server {
 
-request_handler::request_handler(const std::string& doc_root)
-    : doc_root_(doc_root)
+request_handler::request_handler(const std::string& doc_root, const std::string& log_file)
+    : doc_root_(doc_root),
+      log_file_(log_file)
 {
 }
 
 void request_handler::handle_request(const request& req, reply& rep)
 {
     std::string request_path;
+
+    if(!log_file_.empty()) {
+        std::fstream fs;
+        fs.open (log_file_, std::fstream::out | std::fstream::app);
+        fs << req.uri << std::endl;
+        fs.close();
+    }
 
     if (!url_decode(req.uri, request_path))
     {

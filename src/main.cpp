@@ -84,13 +84,14 @@ int main(int argc, char* argv[])
             ("host,h", po::value<std::string>(), "host or ip")
             ("port,p", po::value<std::string>(), "port to listen")
             ("docroot,d", po::value<std::string>(), "server document's root")
+            ("log,l", po::value<std::string>(), "log file path")
             ;
 
     try {
         po::variables_map vm;
         po::store(po::parse_command_line(argc, argv, desc), vm);
         po::notify(vm);
-        std::string host, port, doc_root;
+        std::string host, port, doc_root, log_file;
 
         if (vm.count("help")) {
             std::cout << desc << "\n";
@@ -118,9 +119,13 @@ int main(int argc, char* argv[])
             doc_root = "./";
         }
 
+        if (vm.count("log")) {
+            log_file = vm["log"].as<std::string>();
+        }
+
         skeleton_daemon();
         // Initialise the server.
-        http::server::server s(host, port, doc_root);
+        http::server::server s(host, port, doc_root, log_file);
 
         while (1)
         {
