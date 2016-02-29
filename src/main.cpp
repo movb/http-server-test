@@ -121,8 +121,6 @@ int main(int argc, char* argv[])
 
         if (vm.count("log")) {
             log_file = vm["log"].as<std::string>();
-        } else {
-            log_file = "/tmp/httpserver.log";
         }
 
         skeleton_daemon();

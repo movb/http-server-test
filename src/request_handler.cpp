@@ -58,6 +58,13 @@ void request_handler::handle_request(const request& req, reply& rep)
     }
     */
 
+    size_t query_params_pos = request_path.find("?");
+    std::string query_string;
+    if(query_params_pos != std::string::npos) {
+        query_string = request_path.substr(query_params_pos);
+        request_path.erase(query_params_pos);
+    }
+
     // Determine the file extension.
     std::size_t last_slash_pos = request_path.find_last_of("/");
     std::size_t last_dot_pos = request_path.find_last_of(".");
