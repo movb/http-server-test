@@ -20,6 +20,7 @@
 #include <boost/asio.hpp>
 #include <boost/program_options.hpp>
 #include "server.hpp"
+#include <getopt.h>
 
 namespace po = boost::program_options;
 
@@ -76,8 +77,7 @@ static void skeleton_daemon()
     openlog ("httpserver", LOG_PID, LOG_DAEMON);
 }
 
-int main(int argc, char* argv[])
-{
+bool parse_parameters(int argc, char** argv, std::string& host, std::string& port, std::string& doc_root, std::string& log_file) {
     po::options_description desc("Allowed options");
     desc.add_options()
             ("help", "produce help message")
@@ -87,41 +87,75 @@ int main(int argc, char* argv[])
             ("log,l", po::value<std::string>(), "log file path")
             ;
 
+    po::variables_map vm;
+    po::store(po::parse_command_line(argc, argv, desc), vm);
+    po::notify(vm);
+
+    if (vm.count("help")) {
+        std::cout << desc << "\n";
+        return false;
+    }
+
+    if (vm.count("host")) {
+        host = vm["host"].as<std::string>();
+    } else {
+        std::cout << "Using localhost as default host.\n";
+        host = "localhost";
+    }
+
+    if (vm.count("port")) {
+        port = vm["port"].as<std::string>();
+    } else {
+        std::cout << "Using 6666 as default port.\n";
+        port = "6666";
+    }
+
+    if (vm.count("docroot")) {
+        doc_root = vm["docroot"].as<std::string>();
+    } else {
+        std::cout << "Using current directory as default documents root.\n";
+        doc_root = "./";
+    }
+
+    if (vm.count("log")) {
+        log_file = vm["log"].as<std::string>();
+    }
+
+    return true;
+}
+
+bool parse_parameters_getopt(int argc, char** argv, std::string& host, std::string& port, std::string& doc_root, std::string& log_file) {
+    int c;
+
+    int opterr = 0;
+    while ((c = getopt (argc, argv, "h:p:d:l:")) != -1)
+        switch (c)
+        {
+        case 'h':
+            host = std::string(optarg);
+            break;
+        case 'p':
+            port = std::string(optarg);
+            break;
+        case 'd':
+            doc_root = std::string(optarg);
+            break;
+        case 'l':
+            log_file = std::string(optarg);
+            break;
+        default:
+            break;
+        }
+
+    return true;
+}
+
+int main(int argc, char* argv[])
+{
     try {
-        po::variables_map vm;
-        po::store(po::parse_command_line(argc, argv, desc), vm);
-        po::notify(vm);
         std::string host, port, doc_root, log_file;
-
-        if (vm.count("help")) {
-            std::cout << desc << "\n";
-            return 1;
-        }
-
-        if (vm.count("host")) {
-            host = vm["host"].as<std::string>();
-        } else {
-            std::cout << "Using localhost as default host.\n";
-            host = "localhost";
-        }
-
-        if (vm.count("port")) {
-            port = vm["port"].as<std::string>();
-        } else {
-            std::cout << "Using 6666 as default port.\n";
-            port = "6666";
-        }
-
-        if (vm.count("docroot")) {
-            doc_root = vm["docroot"].as<std::string>();
-        } else {
-            std::cout << "Using current directory as default documents root.\n";
-            doc_root = "./";
-        }
-
-        if (vm.count("log")) {
-            log_file = vm["log"].as<std::string>();
-        }
+        if (!parse_parameters_getopt(argc, argv, host, port, doc_root, log_file))
+            return 0;
 
         skeleton_daemon();
         // Initialise the server.
